@@ -63,7 +63,7 @@ function Entry(_params=entry_base_params()) constructor {
 		}
 			
 		if (self.text != "") {
-			draw_text(self.x + 1, self.y + _text_y, self.text);
+			draw_text_ext(self.x + 1, self.y + _text_y, self.text, -1, self.width);
 		} else {
 			draw_set_alpha(.50);
 			draw_text(self.x + 1, self.y + _text_y, self.placeholder);
@@ -111,9 +111,12 @@ function Entry(_params=entry_base_params()) constructor {
 		draw_set_font(self.font);
 		switch (_kb_last_key) {
 			case vk_enter:
+				keyboard_string = "";
 				if (string_length(self.text) < 1) exit;
 				self.active = false;
-				self.onChange();
+				if (self.onChange != -1) {
+					self.onChange();
+				}
 				break;
 				
 			default:
@@ -141,6 +144,7 @@ function entry_base_params() {
 		placeholder:"",
 		x:			int64(0),
 		y:			int64(0),
+		label:		"",
 		minWidth:	0,
 		minHeight:	0,
 		maxWidth:	infinity,
